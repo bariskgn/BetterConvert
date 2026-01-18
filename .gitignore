@@ -1,0 +1,45 @@
+
+# Valid for Xcode 9, 10, 11, 12, 13, 14, 15
+
+## OS X
+.DS_Store
+
+## Xcode
+# User settings
+xcuserdata/
+
+# Derived files
+DerivedData/
+*.hmap
+*.ipa
+*.pkg
+*.dSYM/
+*.xcresult/
+
+# Build generated
+build/
+
+# Swift Package Manager
+.swiftpm/
+.build/
+Packages/
+Package.pins
+Package.resolved
+
+# CocoaPods
+Pods/
+# Carthage
+Carthage/Build/
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Code Injection
+# iOS Injection
+iOSInjectionProject/
+
+# Secrets
+BetterConvert/Configuration/Secrets.swift
