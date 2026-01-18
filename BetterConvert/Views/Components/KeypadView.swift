@@ -5,16 +5,12 @@ struct KeypadView: View {
     let onDelete: () -> Void
     
     // Grid layout for keypad
-    // 7 8 9
-    // 4 5 6
-    // 1 2 3
-    // C 0 <
     private let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 3)
     
     var body: some View {
-        LazyVGrid(columns: columns, spacing: 0) { // No extra vertical spacing
-            // Row 1: 7 8 9
-            ForEach(7...9, id: \.self) { number in
+        LazyVGrid(columns: columns, spacing: 12) {
+            // Row 1: 1 2 3
+            ForEach(1...3, id: \.self) { number in
                 KeypadButton(text: "\(number)") { onKeyPress("\(number)") }
             }
             
@@ -23,12 +19,12 @@ struct KeypadView: View {
                 KeypadButton(text: "\(number)") { onKeyPress("\(number)") }
             }
             
-            // Row 3: 1 2 3
-            ForEach(1...3, id: \.self) { number in
+            // Row 3: 7 8 9
+            ForEach(7...9, id: \.self) { number in
                 KeypadButton(text: "\(number)") { onKeyPress("\(number)") }
             }
             
-            // Row 4: C 0 Delete
+            // Row 4: C 0 =
             KeypadButton(text: "C") {
                 onKeyPress("CLEAR")
             }
@@ -37,26 +33,25 @@ struct KeypadView: View {
                 onKeyPress("0")
             }
             
-            KeypadButton(content: Image(systemName: "delete.left.fill")) {
-                onDelete()
+            KeypadButton(text: "=") {
+                onKeyPress("=")
+            }
+
+            // Row 5: , Space Delete
+            KeypadButton(text: ",") {
+                onKeyPress(".")
             }
             
-            // Row 5: = .
-             KeypadButton(text: "=") {
-                 onKeyPress("=")
-             }
-             
-             KeypadButton(text: ".") {
-                 onKeyPress(".")
-             }
+            Color.clear.frame(height: 50)
+            
+            KeypadButton(content: Image(systemName: "delete.left")) {
+                onDelete()
+            }
         }
-        .padding()
+        .padding(.horizontal, 24)
+        .padding(.bottom, 8)
     }
 }
-
-// Separate component for the operator row to be placed above numbers if needed,
-// OR we can integrate it. The design shows operators in a row ABOVE the numbers.
-// [ ÷ ] [ x ] [ + ] [ - ]
 
 struct OperatorRow: View {
     let onKeyPress: (String) -> Void
@@ -97,10 +92,10 @@ struct KeypadButton<Content: View>: View {
             action()
         }) {
             content
-                .font(.system(size: 26, weight: .medium))
+                .font(.system(size: 22, weight: .medium)) // Reduced size
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .frame(height: 60) // Fixed smaller height for buttons
+                .frame(height: 50) // Reduced height
                 .contentShape(Rectangle()) 
         }
     }
@@ -113,14 +108,13 @@ struct OperatorButton: View {
     var body: some View {
         Button(action: action) {
             Text(symbol)
-                .font(.title)
-                .fontWeight(.bold)
+                .font(.system(size: 24, weight: .medium))
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
-                .frame(height: 60)
+                .frame(height: 54)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.white.opacity(0.5), lineWidth: 1)
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.white.opacity(0.3), lineWidth: 1)
                 )
         }
     }

@@ -30,10 +30,9 @@ struct MainView: View {
                 (viewModel.sourceCurrency?.color ?? Color.blue)
                     .ignoresSafeArea()
                 
-                // Layer 2: Top Right Quadrant (Target Color - Darker)
-                // We want this to cover the right side of the top 35% of the screen.
+                // Layer 2: Right-Top Quadrant Background (Target Color - Darker)
                 GeometryReader { geo in
-                    let topHeight = geo.size.height * 0.45 // Increased to 45%
+                    let topHeight = geo.size.height * 0.42 // Matching the 42% split
                     (viewModel.sourceCurrency?.color.darker() ?? Color.blue.darker())
                         .frame(width: geo.size.width / 2, height: topHeight)
                         .position(x: geo.size.width * 0.75, y: topHeight / 2) 
@@ -91,11 +90,10 @@ struct MainView: View {
                             // Center Badge
                             ZStack {
                                 Circle()
-                                    .fill(Color.black.opacity(0.25))
-                                    .frame(width: 44, height: 44)
-                                Text("To")
-                                    .font(.caption)
-                                    .fontWeight(.bold)
+                                    .fill(Color.black.opacity(0.15))
+                                    .frame(width: 40, height: 40)
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 14, weight: .bold))
                                     .foregroundColor(.white)
                             }
                             .offset(y: 4)
@@ -113,7 +111,7 @@ struct MainView: View {
                                         Text(viewModel.targetCurrency?.symbol ?? "")
                                         Text(formatDecimal(viewModel.convertedAmount))
                                     }
-                                    .font(.system(size: 48, weight: .medium)) // Reverted to 48
+                                    .font(.system(size: 44, weight: .medium))
                                     .minimumScaleFactor(0.5)
                                     .lineLimit(1)
                                     .foregroundColor(.white)
@@ -123,18 +121,18 @@ struct MainView: View {
                                 .contentShape(Rectangle())
                             }
                         }
-                        .padding(.bottom, 40) // Reverted padding
+                        .padding(.bottom, 30)
                     }
-                    .frame(height: availableHeight * 0.45) 
+                    .frame(height: availableHeight * 0.42) 
                     
                     
-                    // MARK: - Calculator Section (Bottom 55%)
-                    VStack(spacing: 0) { // Reverted spacing
+                    // MARK: - Calculator Section (Bottom 58%)
+                    VStack(spacing: 0) {
                         
                         // Operators
                         OperatorRow { op in handleKeyPress(op) }
                             .padding(.horizontal, 24)
-                            .padding(.top, 10) // Reverted padding
+                            .padding(.top, 8)
                             .padding(.bottom, 0)
                         
                         // Keypad
@@ -150,29 +148,26 @@ struct MainView: View {
                         // Footer
                         VStack(spacing: 0) {
                             Rectangle()
-                                .fill(Color.white.opacity(0.3))
+                                .fill(Color.white.opacity(0.2))
                                 .frame(height: 1)
                                 .padding(.horizontal, 0)
                             
                             HStack {
-                                Text("Exchange Rate")
-                                    .font(.caption)
-                                    .foregroundColor(.white.opacity(0.8))
                                 Spacer()
                                 if let source = viewModel.sourceCurrency, let target = viewModel.targetCurrency {
                                      let rate = viewModel.converter.convert(1, from: source, to: target)
                                     Text("1 \(source.code) = \(formatDecimal(rate, maxFraction: 5)) \(target.code)")
                                         .font(.caption)
-                                        .fontWeight(.bold)
-                                        .foregroundColor(.white)
+                                        .fontWeight(.medium)
+                                        .foregroundColor(.white.opacity(0.9))
                                 }
+                                Spacer()
                             }
-                            .padding(.top, 16)
-                            .padding(.bottom, safeArea.bottom > 0 ? safeArea.bottom : 16)
-                            .padding(.horizontal, 24)
+                            .padding(.vertical, 16)
+                            .padding(.bottom, safeArea.bottom > 0 ? safeArea.bottom : 0)
                         }
                     }
-                    .frame(height: availableHeight * 0.55)
+                    .frame(height: availableHeight * 0.58)
                 }
             }
             .edgesIgnoringSafeArea(.all)
